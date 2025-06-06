@@ -22,10 +22,11 @@ class Livraison extends Model
     ];
 
     // Caster les dates en objets Carbon
-    protected $dates = [
-        'date_commande',
-        'date_livraison',
-    ];
+    protected $casts = [
+    'date_commande' => 'datetime',
+    'date_livraison' => 'datetime',
+];
+
 
     public function client()
     {
