@@ -42,6 +42,7 @@
                                     <tr class="ligth ligth-data">
                                         <th>ID Client</th>
                                         <th>Nom du Client</th>
+                                        <th>Catégorie</th>
                                         <th>Telephone</th>
                                         <th>Adresse</th>
                                         <th>Date d'ajout</th>

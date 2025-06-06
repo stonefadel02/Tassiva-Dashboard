@@ -28,6 +28,10 @@
                                     <label class="mb-2">Adresse</label>
                                     <textarea class="form-control" id="" name="" rows="2" ></textarea>
                                 </div>
+                                <div class="col">
+                                    <label class="mb-2">Catégorie</label>
+                                    <textarea class="form-control" id="" name="" rows="2" ></textarea>
+                                </div>
                             </div>
                             <div class="col-lg-12 mt-4">
                                 <div class="d-flex flex-wrap align-items-ceter justify-content-center">

@@ -35,6 +35,7 @@
                                 data-target="#add-Vente-Modal"><i class="las la-plus mr-3"></i>Ajoutez une commande</a>
                         </div>
                     </div>
+                     @include('ventes.modalVente')
                     <div class="col-lg-12 mb-3">
                         <div class="table-responsive rounded mb-3">
                             <table class="data-tables table mb-0 tbl-server-info">

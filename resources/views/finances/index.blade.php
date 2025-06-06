@@ -34,6 +34,7 @@
                             <a href="#" class="btn btn-primary add-list" data-toggle="modal"
                                 data-target="#add-trasaction-Modal"><i class="las la-plus mr-3"></i>Faire une transaction</a>
                         </div>
+                         @include('finances.modalFinance')
                     </div>
                     <div class="col-lg-12 mb-3">
                         <div class="table-responsive rounded mb-3">

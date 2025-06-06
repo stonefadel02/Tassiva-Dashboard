@@ -9,6 +9,7 @@ use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\LivreurController;
+use App\Http\Controllers\ProfileController;
 
 
 
@@ -35,3 +36,6 @@ Route::get('/', [DashboardController::class, 'index']);
 
 Route::get('clients', [ClientController::class, 'index']);
 Route::get('list_livreur', [LivreurController::class, 'index']);
+
+// Route pour le profil utilisateur
+Route::get('/profil', [ProfileController::class, 'index'])->name('profil');

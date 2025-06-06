@@ -30,11 +30,14 @@
                                     offre de l'espace.
                                     <br> pour répertorier vos produits et votre offre de la manière la plus attrayante.
                                 </p>
-                            </div>
+                        </div>
+                            <a href="#" class="btn border add-btn shadow-none mx-2 d-none d-md-block"
+                                data-toggle="modal" data-target="#new-product"><i class="las la-plus mr-2"></i>Ajouter un produit</a>
                             <a href="#" class="btn btn-primary add-list" data-toggle="modal"
                                 data-target="#add-Stock-Modal"><i class="las la-plus mr-3"></i>Ajoutez du stock</a>
                         </div>
                     </div>
+                    @include('stocks.modalStock')
                     <div class="col-lg-12 mb-3">
                         <div class="table-responsive rounded mb-3">
                             <table class="data-tables table mb-0 tbl-server-info">

@@ -38,7 +38,7 @@
                             <div class="col-lg-12 mt-4">
                                 <div class="d-flex flex-wrap align-items-ceter justify-content-center">
                                     <div class="btn btn-primary mr-4" data-dismiss="modal">Annuler</div>
-                                    <div class="btn btn-outline-primary" data-dismiss="modal">Ajouter</div>
+                                    <button type="submit" class="btn btn-outline-primary">Ajouter</button>
                                 </div>
                             </div>
                         </form>

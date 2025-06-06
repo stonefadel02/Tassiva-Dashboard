@@ -17,6 +17,7 @@
     <div class="wrapper">
         @include('layouts.sidebar')
         @include('layouts.navbar')
+        
 
 
         <div class="content-page">
@@ -32,11 +33,11 @@
                                                 <img src="../assets/images/product/1.png" class="img-fluid" alt="image">
                                             </div>
                                             <div>
-                                                <p class="mb-2">Stocks</p>
-                                                <h4> <span class='' data-toggle="modal" data-target="#stock-Modal" style="cursor: pointer;"> 31 </span> |
+                                                <p class="mb-2">Stock | Rupture</p>
+                                                <h4> <span class='' data-toggle="modal" data-target="#stock-Modal" style="cursor: pointer;"> 402 </span> |
                                                     <span class="text-danger" data-toggle="modal"
                                                         data-target="#rupture-Modal" style="cursor: pointer;">
-                                                        12
+                                                        6
                                                     </span>
                                                 </h4>
                                             </div>
@@ -57,8 +58,12 @@
                                                 <img src="../assets/images/product/1.png" class="img-fluid" alt="image">
                                             </div>
                                             <div>
-                                                <p class="mb-2">Ventes</p>
-                                                <h4>43 900</h4>
+                                                <p class="mb-2">Chiffre d'affaire</p>
+                                                <h4>
+                                                    <span data-toggle="modal" data-target="#ca-Modal" style="cursor: pointer;">
+                                                        43 900f
+                                                    </span>
+                                                </h4>
                                             </div>
                                         </div>
                                         <div class="iq-progress-bar mt-2">
@@ -68,6 +73,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @include('dashboard.modalDashboard')
                             <div class="col-lg-3 col-md-4" data-trigger="hover" data-toggle="popover"
                                 data-placement="top" data-content="Délai moyen de livraison">
                                 <div class="card card-block card-stretch card-height">
@@ -77,8 +83,12 @@
                                                 <img src="../assets/images/product/2.png" class="img-fluid" alt="image">
                                             </div>
                                             <div>
-                                                <p class="mb-2">Livraisons</p>
-                                                <h4>1 Heure</h4>
+                                                <p class="mb-2">Nbre de Livraisons</p>
+                                                <h4>
+                                                <span style="cursor: pointer;" data-toggle="modal" data-target="#livraison-Modal">
+                                                     120
+                                                </span>
+                                                </h4>
                                             </div>
                                         </div>
                                         <div class="iq-progress-bar mt-2">
@@ -88,6 +98,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @include('dashboard.modalDashboard')
                             <div class="col-lg-3 col-md-4" data-trigger="hover" data-toggle="popover"
                                 data-placement="top" data-content="Solde actuel en Fcfa">
                                 <div class="card card-block card-stretch card-height">
@@ -98,7 +109,11 @@
                                             </div>
                                             <div>
                                                 <p class="mb-2">Finances</p>
-                                                <h4>143 000</h4>
+                                                <h5>
+                                                    <span style="cursor: pointer;" data-toggle="modal" data-target="#finance-Modal">
+                                                       5 400 000 f
+                                                    </span>
+                                                </h5>
                                             </div>
                                         </div>
                                         <div class="iq-progress-bar mt-2">
@@ -110,6 +125,7 @@
                             </div>
                         </div>
                     </div>
+                    @include('dashboard.modalDashboard')
                     <div class="col-lg-6">
                         <div class="card card-block card-stretch card-height">
                             <div class="card-header d-flex justify-content-between">

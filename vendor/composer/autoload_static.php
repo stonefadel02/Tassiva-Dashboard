@@ -516,9 +516,12 @@ class ComposerStaticInit626b9e7ddd47fb7eff9aaa53cce0c9ad
     );
 
     public static $classMap = array (
+        'App\\Http\\Controllers\\ClientController' => __DIR__ . '/../..' . '/app/Http/Controllers/ClientController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\DashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/DashboardController.php',
         'App\\Http\\Controllers\\FinanceController' => __DIR__ . '/../..' . '/app/Http/Controllers/FinanceController.php',
         'App\\Http\\Controllers\\LivraisonController' => __DIR__ . '/../..' . '/app/Http/Controllers/LivraisonController.php',
+        'App\\Http\\Controllers\\LivreurController' => __DIR__ . '/../..' . '/app/Http/Controllers/LivreurController.php',
         'App\\Http\\Controllers\\StockController' => __DIR__ . '/../..' . '/app/Http/Controllers/StockController.php',
         'App\\Http\\Controllers\\VenteController' => __DIR__ . '/../..' . '/app/Http/Controllers/VenteController.php',
         'App\\Models\\Finance' => __DIR__ . '/../..' . '/app/Models/Finance.php',
