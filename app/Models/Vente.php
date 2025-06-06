@@ -9,7 +9,6 @@ class Vente extends Model
 {
     use HasFactory;
 
-    // Champs remplissables
     protected $fillable = [
         'date',
         'produit_id',
@@ -17,6 +16,7 @@ class Vente extends Model
         'quantite_vendue',
         'prix_unitaire',
         'mode_paiement',
+        'id_client',
         'commentaires',
     ];
 
@@ -24,5 +24,11 @@ class Vente extends Model
     public function stock()
     {
         return $this->belongsTo(Stock::class, 'produit_id');
+    }
+
+    // Relation : Une vente appartient à un client
+    public function client()
+    {
+        return $this->belongsTo(Client::class, 'id_client', 'id_client');
     }
 }

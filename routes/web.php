@@ -20,6 +20,9 @@ use App\Http\Controllers\ProfileController;
 
 // Routes pour les Stocks
 Route::resource('stocks', StockController::class);
+Route::post('stocks/{stock}/reapprovisionner', [StockController::class, 'reapprovisionner'])->name('stocks.reapprovisionner');
+Route::get('stocks/search', [StockController::class, 'search'])->name('stocks.search');
+Route::post('stocks/add-modal', [StockController::class, 'addModal'])->name('stocks.addModal');
 
 // Routes pour les Ventes
 Route::resource('ventes', VenteController::class);

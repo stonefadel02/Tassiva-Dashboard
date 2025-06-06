@@ -9,7 +9,6 @@ class Livraison extends Model
 {
     use HasFactory;
 
-    // Champs remplissables
     protected $fillable = [
         'date_commande',
         'date_livraison',
@@ -21,4 +20,15 @@ class Livraison extends Model
         'statut_livraison',
         'commentaires',
     ];
+
+    // Caster les dates en objets Carbon
+    protected $dates = [
+        'date_commande',
+        'date_livraison',
+    ];
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class, 'id_client', 'id_client');
+    }
 }

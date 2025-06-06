@@ -1,16 +1,15 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
-
 <head>
-    <title>{{ $stocks }}</title>
+    <title>Gestion des Stocks</title>
     @include('layouts.meta')
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body class="  ">
     <!-- loader Start -->
     <div id="loading">
-        <div id="loading-center">
-        </div>
+        <div id="loading-center"></div>
     </div>
     <!-- loader END -->
     <!-- Wrapper Start -->
@@ -18,26 +17,18 @@
         @include('layouts.sidebar')
         @include('layouts.navbar')
 
-
         <div class="content-page">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between mb-4">
                             <div>
                                 <h2 class="mb-3">Gestion des Stocks</h2>
-                                <p class="mb-0">La liste des produits dicte efficacement la présentation du produit et
-                                    offre de l'espace.
-                                    <br> pour répertorier vos produits et votre offre de la manière la plus attrayante.
-                                </p>
-                        </div>
-                            <a href="#" class="btn border add-btn shadow-none mx-2 d-none d-md-block"
-                                data-toggle="modal" data-target="#new-product"><i class="las la-plus mr-2"></i>Ajouter un produit</a>
-                            <a href="#" class="btn btn-primary add-list" data-toggle="modal"
-                                data-target="#add-Stock-Modal"><i class="las la-plus mr-3"></i>Ajoutez du stock</a>
+                                <p class="mb-0">La liste des produits dicte efficacement la présentation du produit et offre de l'espace pour répertorier vos produits et votre offre de la manière la plus attrayante.</p>
+                            </div>
+                            <a href="#" class="btn btn-primary add-list" data-toggle="modal" data-target="#add-Stock-Modal"><i class="las la-plus mr-3"></i>Ajoutez du stock</a>
                         </div>
                     </div>
-                    @include('stocks.modalStock')
                     <div class="col-lg-12 mb-3">
                         <div class="table-responsive rounded mb-3">
                             <table class="data-tables table mb-0 tbl-server-info">
@@ -56,43 +47,137 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($stocks as $stock)
-                                    <tr>
-                                        <td>{{ $stock->id }}</td>
-                                        <td>{{ $stock->nom_produit }}</td>
-                                        <td>{{ $stock->stock_initial }}</td>
-                                        <td>{{ $stock->entrees }}</td>
-                                        <td>{{ $stock->sorties }}</td>
-                                        <td>{{ $stock->stock_actuel }}</td>
-                                        <td>{{ $stock->stock_minimum }}</td>
-                                        <td class="{{ $stock->rupture ? 'text-danger font-weight-bold' : '' }}">
-                                            {{ $stock->rupture ? 'OUI' : 'NON' }}
-                                        </td>
-                                        <td>
-                                            <div class="d-flex align-items-center list-action">
-                                                <a class="badge badge-info mr-2" data-toggle="modal" 
-                                                    data-target="#viewStockModal-{{ $stock->id }}" data-placement="top" 
-                                                    title="" data-original-title="Voir" href="#"><i
-                                                        class="ri-eye-line mr-0"></i></a>
-                                                <a class="badge bg-success mr-2" data-toggle="modal"
-                                                    data-target="#editStockModal-{{ $stock->id }}" data-placement="top"
-                                                    title="" data-original-title="Editer" href="#"><i
-                                                        class="ri-pencil-line mr-0"></i></a>
-                                                <form action="{{ route('stocks.destroy', $stock->id) }}" method="POST"
-                                                    style="display:inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="badge bg-warning mt-0 mr-2"
-                                                        style="border:none;" data-toggle="tooltip" data-placement="top"
-                                                        title="Cette action est irreversible"><i
-                                                            class="ri-delete-bin-line mr-0"></i></button>
-                                                </form>
+                                        <tr>
+                                            <td>{{ $stock->id }}</td>
+                                            <td>{{ $stock->nom_produit }}</td>
+                                            <td>{{ $stock->stock_initial }}</td>
+                                            <td>{{ $stock->entrees }}</td>
+                                            <td>{{ $stock->sorties }}</td>
+                                            <td>{{ $stock->stock_actuel }}</td>
+                                            <td>{{ $stock->stock_minimum }}</td>
+                                            <td class="{{ $stock->rupture ? 'text-danger font-weight-bold' : '' }}">
+                                                {{ $stock->rupture ? 'OUI' : 'NON' }}
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center list-action">
+                                                    <a class="badge badge-info mr-2" data-toggle="modal" data-target="#viewStockModal-{{ $stock->id }}" title="Voir" href="#"><i class="ri-eye-line mr-0"></i></a>
+                                                    <a class="badge bg-success mr-2" data-toggle="modal" data-target="#editStockModal-{{ $stock->id }}" title="Editer" href="#"><i class="ri-pencil-line mr-0"></i></a>
+                                                    <form action="{{ route('stocks.destroy', $stock->id) }}" method="POST" style="display:inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="badge bg-warning mt-0 mr-2" style="border:none;" data-toggle="tooltip" data-placement="top" title="Cette action est irréversible"><i class="ri-delete-bin-line mr-0"></i></button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <!-- Modal Voir le stock -->
+                                        <div class="modal fade" id="viewStockModal-{{ $stock->id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Information du stock</h4>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">×</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body mb-5">
+                                                        <div class="popup text-left">
+                                                            <div class="content create-workform bg-body">
+                                                                <div class="form-row">
+                                                                    <div class="col">
+                                                                        <label class="mb-2">Nom du produit</label>
+                                                                        <input type="text" class="form-control" value="{{ $stock->nom_produit }}" disabled>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <label class="mb-2">Stock initial</label>
+                                                                        <input type="text" class="form-control" value="{{ $stock->stock_initial }}" disabled>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-row">
+                                                                    <div class="col">
+                                                                        <label class="mb-2">Stock actuel</label>
+                                                                        <input type="text" class="form-control" value="{{ $stock->stock_actuel }}" disabled>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <label class="mb-2">Dernière entrée</label>
+                                                                        <input type="text" class="form-control" value="{{ $stock->entrees }}" disabled>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-row">
+                                                                    <div class="col">
+                                                                        <label class="mb-2">Nombre vendu</label>
+                                                                        <input type="text" class="form-control" value="{{ $stock->sorties }}" disabled>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <label class="mb-2">Stock minimum</label>
+                                                                        <input type="text" class="form-control" value="{{ $stock->stock_minimum }}" disabled>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-row">
+                                                                    <div class="col">
+                                                                        <label class="mb-2">Rupture</label>
+                                                                        <input type="text" class="form-control" value="{{ $stock->rupture ? 'OUI' : 'NON' }}" disabled>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <label class="mb-2">Dernière MAJ</label>
+                                                                        <input type="text" class="form-control" value="{{ $stock->updated_at->format('d/m/Y') }}" disabled>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </td>
-                                    </tr>
-                                    @include('stocks.modalStock')
+                                        </div>
+
+                                        <!-- Modal Editer le stock -->
+                                        <div class="modal fade" id="editStockModal-{{ $stock->id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Modifier le stock</h4>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">×</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="popup text-left">
+                                                            <div class="content create-workform bg-body">
+                                                                <form action="{{ route('stocks.update', $stock->id) }}" method="POST">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                    <div class="form-row">
+                                                                        <div class="col">
+                                                                            <label class="mb-2">Nom du produit</label>
+                                                                            <input type="text" name="nom_produit" class="form-control" value="{{ $stock->nom_produit }}" required>
+                                                                        </div>
+                                                                        <div class="col">
+                                                                            <label class="mb-2">Réapprovisionnement</label>
+                                                                            <input type="number" name="entrees" class="form-control" value="{{ $stock->entrees }}" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="col">
+                                                                            <label class="mb-2">Seuil d'alerte</label>
+                                                                            <input type="number" name="stock_minimum" class="form-control" value="{{ $stock->stock_minimum }}" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-12 mt-4">
+                                                                        <div class="d-flex flex-wrap align-items-center justify-content-center">
+                                                                            <button type="button" class="btn btn-primary mr-4" data-dismiss="modal">Annuler</button>
+                                                                            <button type="submit" class="btn btn-outline-primary">Mettre à jour</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endforeach
                                 </tbody>
-
                             </table>
                         </div>
                     </div>
@@ -104,108 +189,63 @@
                                 </div>
                                 <div class="card-header-toolbar d-flex align-items-center">
                                     <div class="dropdown">
-                                        <span class="dropdown-toggle dropdown-bg btn" id="dropdownMenuButton005"
-                                            data-toggle="dropdown">
-                                            This Month<i class="ri-arrow-down-s-line ml-1"></i>
+                                        <span class="dropdown-toggle dropdown-bg btn" id="dropdownMenuButton005" data-toggle="dropdown">
+                                            Ce mois<i class="ri-arrow-down-s-line ml-1"></i>
                                         </span>
-                                        <div class="dropdown-menu dropdown-menu-right shadow-none"
-                                            aria-labelledby="dropdownMenuButton005">
-                                            <a class="dropdown-item" href="#">Year</a>
-                                            <a class="dropdown-item" href="#">Month</a>
-                                            <a class="dropdown-item" href="#">Week</a>
+                                        <div class="dropdown-menu dropdown-menu-right shadow-none" aria-labelledby="dropdownMenuButton005">
+                                            <a class="dropdown-item" href="#">Année</a>
+                                            <a class="dropdown-item" href="#">Mois</a>
+                                            <a class="dropdown-item" href="#">Semaine</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
                             <div class="card-body pt-0">
-                                <div id="layout1-chart-5"></div>
+                                <canvas id="stockChart"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Page end  -->
+                <!-- Page end -->
             </div>
         </div>
-
     </div>
     <!-- Wrapper End-->
+    @include('stocks.modalStock')
     @include('layouts.footer')
     @include('layouts.modal')
 
-
-
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        if (jQuery("#layout1-chart-5").length) {    
-            options = {
-                series: [{
-                    name: 'Stock Actuel',
-                    data: {!! json_encode($stocks->pluck('stock_actuel')) !!}
+        const ctx = document.getElementById('stockChart').getContext('2d');
+        const stockChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {!! json_encode($stocks->pluck('nom_produit')) !!},
+                datasets: [{
+                    label: 'Stock Actuel',
+                    data: {!! json_encode($stocks->pluck('stock_actuel')) !!},
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
                 }, {
-                    name: 'Stock Minimum',
-                    data: {!! json_encode($stocks->pluck('stock_minimum')) !!}
-                }],
-                chart: {
-                    type: 'bar',
-                    height: 300
-                },
-                colors: ['#32BDEA', '#FF7E41'],
-                plotOptions: {
-                    bar: {
-                        horizontal: false,
-                        columnWidth: '30%',
-                        endingShape: 'rounded'
-                    },
-                },
-                dataLabels: {
-                    enabled: false
-                },
-                stroke: {
-                    show: true,
-                    width: 3,
-                    colors: ['transparent']
-                },
-                xaxis: {
-                    categories: {!! json_encode($stocks->pluck('nom_produit')) !!},
-                    labels: {
-                        minWidth: 0,
-                        maxWidth: 0
-                    }
-                },
-                yaxis: {
-                    show: true,
-                    labels: {
-                        minWidth: 20,
-                        maxWidth: 20
-                    }
-                },
-                fill: {
-                    opacity: 1
-                },
-                tooltip: {
+                    label: 'Stock Minimum',
+                    data: {!! json_encode($stocks->pluck('stock_minimum')) !!},
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
                     y: {
-                        formatter: function (val) {
-                            return val + " unités";
-                        }
+                        beginAtZero: true
                     }
                 }
-            };
-
-            const chart = new ApexCharts(document.querySelector("#layout1-chart-5"), options);
-            chart.render();
-
-            const body = document.querySelector('body');
-            if (body.classList.contains('dark')) {
-                apexChartUpdate(chart, { dark: true });
             }
-
-            document.addEventListener('ChangeColorMode', function (e) {
-                apexChartUpdate(chart, e.detail);
-            });
-        }
-</script>
-
-
+        });
+    </script>
 </body>
-
 </html>
