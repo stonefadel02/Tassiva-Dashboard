@@ -2,78 +2,90 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
+use App\Models\Livreur;
 use App\Models\Livraison;
 use Illuminate\Http\Request;
 
 class LivraisonController extends Controller
 {
-    // Afficher la liste des livraisons
     public function index()
     {
-        $livraisons = Livraison::all();
-        return view('livraisons.index', compact('livraisons'));
+        $livraisons = Livraison::with(['client', 'livreur'])->get();
+        $clients = Client::all();
+        $livreurs = Livreur::all();
+        return view('livraisons.index', compact('livraisons', 'clients', 'livreurs'));
     }
 
-    // Afficher le formulaire de création d'une livraison
     public function create()
     {
-        return view('livraisons.create');
+        $clients = Client::all();
+        $livreurs = Livreur::all();
+        return view('livraisons.create', compact('clients', 'livreurs'));
     }
 
-    // Enregistrer une nouvelle livraison
     public function store(Request $request)
     {
         $request->validate([
+            'id_commande' => 'required|string|unique:livraisons,id_commande',
             'date_commande' => 'required|date',
             'date_livraison' => 'required|date',
-            'id_commande' => 'required|string|max:255',
-            'id_client' => 'required|string|max:255',
+            'id_client' => 'required|string|exists:clients,id_client',
             'nom_client' => 'required|string|max:255',
             'adresse_livraison' => 'required|string|max:255',
-            'moyen_livraison' => 'required|string|max:255',
-            'statut_livraison' => 'required|string|max:255',
+            'moyen_livraison' => 'required|string|in:Bus,Entreprise,Baché,Gozem',
+            'statut_livraison' => 'required|string|in:Livrée,Non Livrée,En Cours',
+            'livreur_id' => 'nullable|exists:livreurs,id',
+            'delai_livraison' => 'nullable|string|max:255',
+            'commentaires' => 'nullable|string',
         ]);
 
-        Livraison::create($request->all());
-
-        return redirect()->route('livraisons.index')->with('success', 'Livraison enregistrée avec succès.');
+        try {
+            Livraison::create($request->all());
+            return redirect()->route('livraisons.index')->with('success', 'Livraison ajoutée avec succès.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Erreur : ' . $e->getMessage()]);
+        }
     }
 
-    // Afficher les détails d'une livraison
-    public function show(Livraison $livraison)
-    {
-        return view('livraisons.show', compact('livraison'));
-    }
-
-    // Afficher le formulaire d'édition d'une livraison
     public function edit(Livraison $livraison)
     {
-        return view('livraisons.edit', compact('livraison'));
+        $clients = Client::all();
+        $livreurs = Livreur::all();
+        return view('livraisons.edit', compact('livraison', 'clients', 'livreurs'));
     }
 
-    // Mettre à jour une livraison
     public function update(Request $request, Livraison $livraison)
     {
         $request->validate([
+            'id_commande' => 'required|string|unique:livraisons,id_commande,' . $livraison->id,
             'date_commande' => 'required|date',
             'date_livraison' => 'required|date',
-            'id_commande' => 'required|string|max:255',
-            'id_client' => 'required|string|max:255',
+            'id_client' => 'required|string|exists:clients,id_client',
             'nom_client' => 'required|string|max:255',
             'adresse_livraison' => 'required|string|max:255',
-            'moyen_livraison' => 'required|string|max:255',
-            'statut_livraison' => 'required|string|max:255',
+            'moyen_livraison' => 'required|string|in:Bus,Entreprise,Baché,Gozem',
+            'statut_livraison' => 'required|string|in:Livrée,Non Livrée,En Cours',
+            'livreur_id' => 'nullable|exists:livreurs,id',
+            'delai_livraison' => 'nullable|string|max:255',
+            'commentaires' => 'nullable|string',
         ]);
 
-        $livraison->update($request->all());
-
-        return redirect()->route('livraisons.index')->with('success', 'Livraison mise à jour avec succès.');
+        try {
+            $livraison->update($request->all());
+            return redirect()->route('livraisons.index')->with('success', 'Livraison mise à jour avec succès.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Erreur : ' . $e->getMessage()]);
+        }
     }
 
-    // Supprimer une livraison
     public function destroy(Livraison $livraison)
     {
-        $livraison->delete();
-        return redirect()->route('livraisons.index')->with('success', 'Livraison supprimée avec succès.');
+        try {
+            $livraison->delete();
+            return redirect()->route('livraisons.index')->with('success', 'Livraison supprimée avec succès.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Erreur : ' . $e->getMessage()]);
+        }
     }
 }

@@ -18,18 +18,23 @@ class Livraison extends Model
         'adresse_livraison',
         'moyen_livraison',
         'statut_livraison',
+        'delai_livraison',
         'commentaires',
+        'livreur_id',
     ];
 
-    // Caster les dates en objets Carbon
     protected $casts = [
-    'date_commande' => 'datetime',
-    'date_livraison' => 'datetime',
-];
-
+        'date_commande' => 'datetime',
+        'date_livraison' => 'datetime',
+    ];
 
     public function client()
     {
         return $this->belongsTo(Client::class, 'id_client', 'id_client');
+    }
+
+    public function livreur()
+    {
+        return $this->belongsTo(Livreur::class);
     }
 }

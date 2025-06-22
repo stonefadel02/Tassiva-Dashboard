@@ -7,6 +7,7 @@ use App\Models\Vente;
 use App\Models\Stock;
 use App\Models\Livraison;
 use App\Models\Client;
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -76,9 +77,13 @@ class DashboardController extends Controller
             ->get();
 
         // Statistiques financières
+        $soldeInitial = Company::first()->solde_initial ?? 0;
         $totalRecettes = Finance::where('entree_sortie', 'Entrée')->sum('montant');
         $totalDepenses = Finance::where('entree_sortie', 'Sortie')->sum('montant');
-        $benefices = $totalRecettes - $totalDepenses;
+        // Utiliser le solde de la dernière transaction comme solde actuel
+        $lastTransaction = Finance::orderBy('id', 'desc')->first();
+        $soldeActuel = $lastTransaction ? $lastTransaction->solde : $soldeInitial;
+        $benefices = $totalRecettes - $totalDepenses; // Garder pour compatibilité, mais soldeActuel est plus précis
         $nombreRecettes = Finance::where('entree_sortie', 'Entrée')->count();
         $nombreDepenses = Finance::where('entree_sortie', 'Sortie')->count();
 
@@ -110,8 +115,10 @@ class DashboardController extends Controller
             'livraisonsParJour',
             'dernieresLivraisons',
             'topClients',
+            'soldeInitial',
             'totalRecettes',
             'totalDepenses',
+            'soldeActuel',
             'benefices',
             'nombreRecettes',
             'nombreDepenses',

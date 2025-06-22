@@ -51,7 +51,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-md-4" data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Chiffre d'affaire total ce mois en FCFA">
+                            <div class="col-lg-3 col-md-4" data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Chiffre d'affaires total cette semaine en FCFA">
                                 <div class="card card-block card-stretch card-height">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center mb-4 card-total-sale">
@@ -59,7 +59,7 @@
                                                 <img src="../assets/images/product/1.png" class="img-fluid" alt="image">
                                             </div>
                                             <div>
-                                                <p class="mb-2">Chiffre d'affaire</p>
+                                                <p class="mb-2">Chiffre d'affaires</p>
                                                 <h4>
                                                     <span data-toggle="modal" data-target="#ca-Modal" style="cursor: pointer;">
                                                         {{ number_format($chiffreAffaireSemaine, 0) }} FCFA
@@ -74,7 +74,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-md-4" data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Délai moyen de livraison">
+                            <div class="col-lg-3 col-md-4" data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Nombre de livraisons aujourd'hui">
                                 <div class="card card-block card-stretch card-height">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center mb-4 card-total-sale">
@@ -97,7 +97,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-md-4" data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Solde actuel en FCFA">
+                            <div class="col-lg-3 col-md-4" data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Solde actuel de l'entreprise en FCFA">
                                 <div class="card card-block card-stretch card-height">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center mb-4 card-total-sale">
@@ -105,16 +105,16 @@
                                                 <img src="../assets/images/product/3.png" class="img-fluid" alt="image">
                                             </div>
                                             <div>
-                                                <p class="mb-2">Finances</p>
+                                                <p class="mb-2">Solde Actuel</p>
                                                 <h5>
                                                     <span style="cursor: pointer;" data-toggle="modal" data-target="#finance-Modal">
-                                                        {{ number_format($benefices, 0) }} FCFA
+                                                        {{ number_format($soldeActuel, 0) }} FCFA
                                                     </span>
                                                 </h5>
                                             </div>
                                         </div>
                                         <div class="iq-progress-bar mt-2">
-                                            <span class="bg-success iq-progress progress-1" data-percent="{{ ($totalRecettes > 0 ? ($benefices / $totalRecettes) * 100 : 0) }}">
+                                            <span class="bg-success iq-progress progress-1" data-percent="{{ ($totalRecettes > 0 ? ($soldeActuel / ($soldeInitial + $totalRecettes)) * 100 : 0) }}">
                                             </span>
                                         </div>
                                     </div>
@@ -234,7 +234,7 @@
         const ctx = document.getElementById('financeChart').getContext('2d');
         const revenus = @json($revenus);
         const depenses = @json($depenses);
-        const labels = ['Mois -2', 'Mois -1', 'Mois actuel'];
+        const labels = ['{{ Carbon\Carbon::now()->subMonths(2)->translatedFormat('F') }}', '{{ Carbon\Carbon::now()->subMonths(1)->translatedFormat('F') }}', '{{ Carbon\Carbon::now()->translatedFormat('F') }}'];
 
         new Chart(ctx, {
             type: 'bar',
@@ -243,14 +243,14 @@
                 datasets: [
                     {
                         label: 'Recettes',
-                        data: [revenus[3] || 0, revenus[4] || 0, revenus[5] || 0],
+                        data: [revenus[{{ Carbon\Carbon::now()->subMonths(2)->month }}] || 0, revenus[{{ Carbon\Carbon::now()->subMonths(1)->month }}] || 0, revenus[{{ Carbon\Carbon::now()->month }}] || 0],
                         backgroundColor: 'rgba(75, 192, 192, 0.5)',
                         borderColor: 'rgba(75, 192, 192, 1)',
                         borderWidth: 1
                     },
                     {
                         label: 'Dépenses',
-                        data: [depenses[3] || 0, depenses[4] || 0, depenses[5] || 0],
+                        data: [depenses[{{ Carbon\Carbon::now()->subMonths(2)->month }}] || 0, depenses[{{ Carbon\Carbon::now()->subMonths(1)->month }}] || 0, depenses[{{ Carbon\Carbon::now()->month }}] || 0],
                         backgroundColor: 'rgba(255, 99, 132, 0.5)',
                         borderColor: 'rgba(255, 99, 132, 1)',
                         borderWidth: 1

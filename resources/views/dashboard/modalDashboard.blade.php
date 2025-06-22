@@ -98,8 +98,6 @@
     </div>
 </div>
 
-<!-- ... Autres modaux inchangés ... -->
-
 <!-- Modal Nombre de Livraison -->
 <div class="modal fade" id="livraison-Modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -136,14 +134,12 @@
     </div>
 </div>
 
-<!-- ... Autres modaux inchangés ... -->
-
 <!-- Modal Finance -->
 <div class="modal fade" id="finance-Modal" tabindex="-1" role="dialog" aria-labelledby="financeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="financeModalLabel">Résumé Finance</h5>
+                <h5 class="modal-title" id="financeModalLabel">Résumé Financier</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -158,6 +154,10 @@
                     </thead>
                     <tbody>
                         <tr>
+                            <td>Solde Initial</td>
+                            <td>{{ number_format($soldeInitial, 0) }}</td>
+                        </tr>
+                        <tr>
                             <td>Recettes</td>
                             <td>{{ number_format($totalRecettes, 0) }}</td>
                         </tr>
@@ -166,8 +166,8 @@
                             <td>{{ number_format($totalDepenses, 0) }}</td>
                         </tr>
                         <tr>
-                            <td>Bénéfice</td>
-                            <td>{{ number_format($benefices, 0) }}</td>
+                            <td>Solde Actuel</td>
+                            <td>{{ number_format($soldeActuel, 0) }}</td>
                         </tr>
                     </tbody>
                 </table>

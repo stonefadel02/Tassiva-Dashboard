@@ -33,11 +33,12 @@ Route::resource('livraisons', LivraisonController::class);
 // Routes pour les Finances
 Route::resource('finances', FinanceController::class);
 
+Route::resource('livreurs', LivreurController::class);
 
 
 Route::get('/', [DashboardController::class, 'index']);
 
-Route::get('clients', [ClientController::class, 'index']);
+Route::resource('clients', ClientController::class);
 Route::get('list_livreur', [LivreurController::class, 'index']);
 
 // Route pour le profil utilisateur

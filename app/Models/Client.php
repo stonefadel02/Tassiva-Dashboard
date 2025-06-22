@@ -17,6 +17,11 @@ class Client extends Model
         'adresse',
         'date_ajout',
     ];
+    protected $casts = [
+    'date_ajout' => 'datetime',
+];
+
+
 
     // Relation : Un client peut avoir plusieurs livraisons
     public function livraisons()
