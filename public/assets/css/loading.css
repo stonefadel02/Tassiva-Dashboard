@@ -1,0 +1,32 @@
+#center-panier {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#center-panier img {
+  width: 80px;
+  transform-origin: top center;
+}
+
+@keyframes swing {
+  0% { transform: rotate(0deg); }
+  20% { transform: rotate(10deg); }
+  40% { transform: rotate(-10deg); }
+  60% { transform: rotate(7deg); }
+  80% { transform: rotate(-7deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.swing-animation {
+  animation: swing 1.2s ease-in-out infinite;
+}
+
+
+.bgrose {
+    background-color: #dd76a694 !important ;
+}
+
+.bgblue {
+    background-color: #5c97a5 !important ;
+}
