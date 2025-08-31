@@ -68,10 +68,10 @@
                                             <td>{{ $client->date_ajout?->format('d/m/Y') ?? '-' }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center list-action">
-                                                    <a class="badge badge-info mr-2" data-toggle="modal" data-target="#edit-Client-Modal-{{ $client->id_client }}"
+                                                    <a class="badge badge-info mr-2" data-toggle="modal" data-target="#edit-Client-Modal-{{ $client->id }}"
                                                         href="#"
                                                         title="Éditer"><i class="ri-pencil-line mr-0"></i></a>
-                                                    <form action="{{ route('clients.destroy', $client->id_client) }}"
+                                                    <form action="{{ route('clients.destroy', $client->id) }}"
                                                         method="POST" style="display:inline;">
                                                         @csrf
                                                         @method('DELETE')
@@ -132,13 +132,7 @@
                         <form action="{{ route('clients.store') }}" method="POST">
                             @csrf
                             <div class="form-row">
-                                <div class="col">
-                                    <label class="mb-2">ID Client</label>
-                                    <input type="text" name="id_client" class="form-control @error('id_client') is-invalid @enderror" value="{{ old('id_client') }}" required>
-                                    @error('id_client')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                               
                                 <div class="col">
                                     <label class="mb-2">Nom du Client</label>
                                     <input type="text" name="nom_client" class="form-control @error('nom_client') is-invalid @enderror" value="{{ old('nom_client') }}" required>

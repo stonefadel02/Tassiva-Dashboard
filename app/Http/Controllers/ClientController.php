@@ -21,7 +21,6 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_client' => 'required|string|unique:clients,id_client',
             'nom_client' => 'required|string|max:255',
             'categorie' => 'nullable|string|max:255',
             'telephone' => 'nullable|string|max:20',
@@ -41,7 +40,6 @@ class ClientController extends Controller
     public function update(Request $request, Client $client)
     {
         $request->validate([
-            'id_client' => 'required|string|unique:clients,id_client,' . $client->id,
             'nom_client' => 'required|string|max:255',
             'categorie' => 'nullable|string|max:255',
             'telephone' => 'nullable|string|max:20',

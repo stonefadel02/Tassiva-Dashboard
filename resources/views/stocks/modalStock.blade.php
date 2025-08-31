@@ -1,5 +1,5 @@
 <!-- Modal Voir le stock -->
-@if(isset($stocks) && $stocks->count() > 0)
+@if (isset($stocks) && $stocks->count() > 0)
     <div class="modal fade" id="viewStockModal-{{ $stock->id }}" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -15,17 +15,26 @@
                             <div class="form-row">
                                 <div class="col">
                                     <label class="mb-2">Nom du produit</label>
-                                    <input type="text" class="form-control" value="{{ $stock->nom_produit }}" disabled>
+                                    <input type="text" class="form-control" value="{{ $stock->nom_produit }}"
+                                        disabled>
                                 </div>
                                 <div class="col">
+                                    <label class="mb-2">Prix unitaire (FCFA)</label>
+                                    <input type="text" class="form-control"
+                                        value="{{ number_format($stock->prix_unitaire ?? 0, 0, ',', ' ') }}" disabled>
+                                </div>
+
+                                <div class="col">
                                     <label class="mb-2">Stock initial</label>
-                                    <input type="text" class="form-control" value="{{ $stock->stock_initial }}" disabled>
+                                    <input type="text" class="form-control" value="{{ $stock->stock_initial }}"
+                                        disabled>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="col">
                                     <label class="mb-2">Stock actuel</label>
-                                    <input type="text" class="form-control" value="{{ $stock->stock_actuel }}" disabled>
+                                    <input type="text" class="form-control" value="{{ $stock->stock_actuel }}"
+                                        disabled>
                                 </div>
                                 <div class="col">
                                     <label class="mb-2">Dernière entrée</label>
@@ -39,14 +48,15 @@
                                 </div>
                                 <div class="col">
                                     <label class="mb-2">Stock minimum</label>
-                                    <input type="text" class="form-control" value="{{ $stock->stock_minimum }}" disabled>
+                                    <input type="text" class="form-control" value="{{ $stock->stock_minimum }}"
+                                        disabled>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="col">
                                     <label class="mb-2">Rupture</label>
-                                    <input type="text" class="form-control" value="{{ $stock->rupture ? 'OUI' : 'NON' }}"
-                                        disabled>
+                                    <input type="text" class="form-control"
+                                        value="{{ $stock->rupture ? 'OUI' : 'NON' }}" disabled>
                                 </div>
                                 <div class="col">
                                     <label class="mb-2">Dernière MAJ</label>
@@ -61,7 +71,7 @@
         </div>
     </div>
 @else
-<p></p>
+    <p></p>
 @endif
 
 
@@ -69,7 +79,7 @@
 
 
 <!-- Editer le stocks  -->
-@if(isset($stocks) && $stocks->count() > 0)
+@if (isset($stocks) && $stocks->count() > 0)
     <div class="modal fade" id="editStockModal-{{ $stock->id }}" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -99,6 +109,11 @@
 
                                     </div>
                                     <div class="col">
+                                        <label class="mb-2">Prix unitaire (FCFA)</label>
+                                        <input type="number" step="0.01" min="0" name="prix_unitaire"
+                                            class="form-control" value="{{ $stock->prix_unitaire }}" required>
+                                    </div>
+                                    <div class="col">
                                         <label class="mb-2">Réapprovisionnement</label>
                                         <input type="number" name="entrees" class="form-control"
                                             value="{{ $stock->entrees }}" required>
@@ -126,7 +141,7 @@
         </div>
     </div>
 @else
-<p></p>
+    <p></p>
 @endif
 
 
@@ -139,8 +154,8 @@
             <form method="POST" action="{{ route('stocks.reapprovisionner', $stock->id) }}">
                 @csrf
                 <div class="modal-header">
-                    <h5 class="modal-title" id="reapproLabel-{{ $stock->id }}">Réapprovisionner {{ $stock->nom_produit
-                        }}</h5>
+                    <h5 class="modal-title" id="reapproLabel-{{ $stock->id }}">Réapprovisionner
+                        {{ $stock->nom_produit }}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
                         <span aria-hidden="true">&times;</span>
                     </button>

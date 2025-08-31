@@ -182,11 +182,19 @@ class VenteController extends Controller
 
 
     // Supprimer une vente
-    public function destroy(Vente $vente)
-    {
+   public function destroy(Vente $vente)
+{
+    // Supprime la livraison liée (si elle existe)
+    try {
+        \App\Models\Livraison::where('id_commande', (string) $vente->id)->delete();
         $vente->delete();
-        return redirect()->route('ventes.index')->with('success', 'Vente supprimée avec succès.');
+        return redirect()->route('ventes.index')->with('success', 'Vente et livraison supprimées avec succès.');
+    } catch (\Exception $e) {
+        return redirect()->back()->withErrors(['error' => 'Erreur : ' . $e->getMessage()]);
     }
+}
+
+    
 
     // public function destroy(Vente $vente)
     // {

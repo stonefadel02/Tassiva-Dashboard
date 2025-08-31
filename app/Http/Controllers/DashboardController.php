@@ -11,6 +11,9 @@ use App\Models\Company;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
+
+
+
 class DashboardController extends Controller
 {
     public function index()
@@ -58,14 +61,38 @@ class DashboardController extends Controller
             ->take(3)
             ->get();
 
-        // Statistiques des livraisons
-        $aujourdHui = Carbon::today();
-        $livraisonsParJour = Livraison::whereDate('date_livraison', $aujourdHui)->count();
-        $dernieresLivraisons = Livraison::with('client')
-            ->whereDate('date_livraison', $aujourdHui)
-            ->orderBy('created_at', 'desc')
-            ->take(3)
-            ->get();
+    // Statistiques des livraisons
+$now        = Carbon::now();
+$startDay   = Carbon::today();
+$endDay     = Carbon::today()->endOfDay();
+
+$livraisonsParJour = Livraison::whereBetween('date_livraison', [$startDay, $endDay])->count();
+
+// Dernières livraisons (les 5 plus récentes, pas seulement aujourd'hui)
+$dernieresLivraisons = Livraison::with('client')
+    ->orderBy('date_livraison', 'desc')
+    ->take(5)
+    ->get();
+
+// En retard (date passée & non livrée)
+$livraisonsEnRetard = Livraison::where('statut_livraison', '!=', 'Livrée')
+    ->where('date_livraison', '<', $now)
+    ->orderBy('date_livraison', 'asc')
+    ->take(5)
+    ->get();
+
+// À venir dans l’heure (non livrée)
+$livraisonsDansUneHeure = Livraison::where('statut_livraison', '!=', 'Livrée')
+    ->whereBetween('date_livraison', [$now, $now->copy()->addHour()])
+    ->orderBy('date_livraison', 'asc')
+    ->take(5)
+    ->get();
+
+// Liste du jour (utile pour le modal dédié)
+$livraisonsAujourdHui = Livraison::whereBetween('date_livraison', [$startDay, $endDay])
+    ->orderBy('date_livraison', 'asc')
+    ->get();
+
 
         // Top 5 clients (basé sur le montant total des ventes)
         $topClients = Vente::select('clients.id_client', 'clients.nom_client')
@@ -123,7 +150,12 @@ class DashboardController extends Controller
             'nombreRecettes',
             'nombreDepenses',
             'revenus',
-            'depenses'
+            'depenses',
+            'livraisonsParJour',
+'dernieresLivraisons',
+'livraisonsEnRetard',
+'livraisonsDansUneHeure',
+'livraisonsAujourdHui',
         ));
     }
 }

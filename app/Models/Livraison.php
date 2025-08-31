@@ -19,6 +19,7 @@ class Livraison extends Model
         'moyen_livraison',
         'statut_livraison',
         'delai_livraison',
+        
         'commentaires',
         'livreur_id',
     ];
@@ -27,6 +28,15 @@ class Livraison extends Model
         'date_commande' => 'datetime',
         'date_livraison' => 'datetime',
     ];
+
+    protected $appends = ['echeance_at'];
+
+    public function getEcheanceAtAttribute()
+    {
+        return $this->date_livraison
+            ? \Carbon\Carbon::parse($this->date_livraison)->copy()->subHour()
+            : null;
+    }
 
     public function client()
     {

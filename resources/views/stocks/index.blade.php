@@ -41,6 +41,7 @@
                                     <tr class="ligth ligth-data">
                                         <th>ID</th>
                                         <th>Nom du produit</th>
+                                        <th>Prix unitaire</th>
                                         <th>Stock Initial</th>
                                         <th>Entrées</th>
                                         <th>Sorties</th>
@@ -52,41 +53,49 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($stocks as $stock)
-                                    <tr>
-                                        <td>{{ $stock->id }}</td>
-                                        <td>{{ $stock->nom_produit }}</td>
-                                        <td>{{ $stock->stock_initial }}</td>
-                                        <td>{{ $stock->entrees }}</td>
-                                        <td>{{ $stock->sorties }}</td>
-                                        <td>{{ $stock->stock_actuel }}</td>
-                                        <td>{{ $stock->stock_minimum }}</td>
-                                        <td class="{{ $stock->rupture ? 'text-danger font-weight-bold' : '' }}">
-                                            {{ $stock->rupture ? 'OUI' : 'NON' }}
-                                        </td>
-                                        <td>
-                                            <div class="d-flex align-items-center list-action">
-                                                <a class="badge badge-info mr-2" data-toggle="modal"
+                                        <tr>
+                                            <td>{{ $stock->id }}</td>
+                                            <td>{{ $stock->nom_produit }}</td>
+                                            <td>{{ number_format($stock->prix_unitaire, 0, ',', ' ') }} FCFA</td>
+                                            <td>{{ $stock->stock_initial }}</td>
+                                            <td>{{ $stock->entrees }}</td>
+                                            <td>{{ $stock->sorties }}</td>
+                                            <td>{{ $stock->stock_actuel }}</td>
+                                            <td>{{ $stock->stock_minimum }}</td>
+                                            <td class="{{ $stock->rupture ? 'text-danger font-weight-bold' : '' }}">
+                                                {{ $stock->rupture ? 'OUI' : 'NON' }}
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center list-action">
+                                                    {{-- <a class="badge badge-info mr-2" data-toggle="modal"
                                                     data-target="#viewStockModal-{{ $stock->id }}" title="Voir"
-                                                    href="#"><i class="ri-eye-line mr-0"></i></a>
-                                                <a class="badge bg-success mr-2" data-toggle="modal"
-                                                    data-target="#editStockModal-{{ $stock->id }}" title="Editer"
-                                                    href="#"><i class="ri-pencil-line mr-0"></i></a>
-                                                <a class="badge bg-success mr-2" data-toggle="modal"
-                                                    data-target="#reapproModal-{{ $stock->id }}" title="Editer"
-                                                    href="#"><i class="ri-refresh-line"></i></a>
-                                                <form action="{{ route('stocks.destroy', $stock->id) }}" method="POST"
-                                                    style="display:inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="badge bg-warning mt-0 mr-2"
-                                                        style="border:none;" data-toggle="tooltip" data-placement="top"
-                                                        title="Cette action est irréversible"><i
-                                                            class="ri-delete-bin-line mr-0"></i></button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @include('stocks.modalStock')
+                                                    href="#"><i class="ri-eye-line mr-0"></i></a> --}}
+                                                    <a class="badge badge-info mr-2 js-view-stock" data-toggle="modal"
+                                                        data-target="#viewStockModal-{{ $stock->id }}"
+                                                        data-url="{{ route('stocks.consolider', $stock->id) }}"
+                                                        title="Voir" href="#"><i
+                                                            class="ri-eye-line mr-0"></i></a>
+                                                    <a class="badge bg-success mr-2" data-toggle="modal"
+                                                        data-target="#editStockModal-{{ $stock->id }}"
+                                                        title="Editer" href="#"><i
+                                                            class="ri-pencil-line mr-0"></i></a>
+                                                    <a class="badge bg-success mr-2" data-toggle="modal"
+                                                        data-target="#reapproModal-{{ $stock->id }}" title="Editer"
+                                                        href="#"><i class="ri-refresh-line"></i></a>
+                                                    <form action="{{ route('stocks.destroy', $stock->id) }}"
+                                                        method="POST" style="display:inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="badge bg-warning mt-0 mr-2"
+                                                            style="border:none;" data-toggle="tooltip"
+                                                            data-placement="top"
+                                                            title="Cette action est irréversible"><i
+                                                                class="ri-delete-bin-line mr-0"></i></button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @include('stocks.modalStock')
                                     @endforeach
                                 </tbody>
                             </table>
@@ -137,30 +146,62 @@
         const stockChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: {!! json_encode($stocks-> pluck('nom_produit'))!!},
-        datasets: [{
-            label: 'Stock Actuel',
-            data: {!! json_encode($stocks-> pluck('stock_actuel')) !!},
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
+                labels: {!! json_encode($stocks->pluck('nom_produit')) !!},
+                datasets: [{
+                    label: 'Stock Actuel',
+                    data: {!! json_encode($stocks->pluck('stock_actuel')) !!},
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
                 }, {
-            label: 'Stock Minimum',
-            data: {!! json_encode($stocks-> pluck('stock_minimum')) !!},
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
+                    label: 'Stock Minimum',
+                    data: {!! json_encode($stocks->pluck('stock_minimum')) !!},
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
                 }]
             },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
         });
     </script>
+    <script>
+        $(function() {
+            $('a.js-view-stock').on('click', function() {
+                const url = $(this).data('url');
+                const target = $(this).data('target'); // ex: #viewStockModal-12
+                const $modal = $(target);
+
+                $.post(url, {
+                        _token: '{{ csrf_token() }}'
+                    })
+                    .done(function(res) {
+                        // Mets à jour les champs de la modale (adapte les sélecteurs à tes inputs)
+                        $modal.find('input').each(function() {
+                            const label = $(this).prev('label').text().trim();
+                            if (label.includes('Nom du produit')) $(this).val(res.nom_produit);
+                            if (label.includes('Stock initial')) $(this).val(res.stock_initial);
+                            if (label.includes('Stock actuel')) $(this).val(res.stock_actuel);
+                            if (label.includes('Dernière entrée')) $(this).val(res.entrees);
+                            if (label.includes('Nombre vendu')) $(this).val(res.sorties);
+                            if (label.includes('Stock minimum')) $(this).val(res.stock_minimum);
+                            if (label.includes('Rupture')) $(this).val(res.rupture ? 'OUI' :
+                                'NON');
+                            if (label.includes('Dernière MAJ')) $(this).val(res.updated_at);
+                        });
+                    })
+                    .fail(function(xhr) {
+                        console.error(xhr.responseText || xhr.statusText);
+                    });
+            });
+        });
+    </script>
+
 </body>
 
 <!-- Ajouter du stock -->
@@ -176,7 +217,7 @@
             <div class="modal-body">
                 <div class="popup text-left">
                     <div class="content create-workform bg-body">
-                        
+
                         <form action="{{ route('stocks.addModal') }}" method="POST">
                             @csrf
                             <div class="form-row">
@@ -186,7 +227,16 @@
                                         class="form-control @error('nom_produit') is-invalid @enderror"
                                         value="{{ old('nom_produit') }}" required>
                                     @error('nom_produit')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col">
+                                    <label class="mb-2">Prix unitaire (FCFA)</label>
+                                    <input type="number" step="0.01" min="0" name="prix_unitaire"
+                                        class="form-control @error('prix_unitaire') is-invalid @enderror"
+                                        value="{{ old('prix_unitaire') }}" required>
+                                    @error('prix_unitaire')
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col">
@@ -195,7 +245,7 @@
                                         class="form-control @error('entrees') is-invalid @enderror"
                                         value="{{ old('entrees') }}" required>
                                     @error('entrees')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
@@ -206,7 +256,7 @@
                                         class="form-control @error('stock_minimum') is-invalid @enderror"
                                         value="{{ old('stock_minimum') }}" required>
                                     @error('stock_minimum')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>

@@ -30,7 +30,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('auth')->group(function () {
+// Route::middleware('auth')->group(function () {
     
     // Page d'accueil / Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('home');
@@ -45,7 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::post('stocks/{stock}/reapprovisionner', [StockController::class, 'reapprovisionner'])->name('stocks.reapprovisionner');
     Route::get('stocks/search', [StockController::class, 'search'])->name('stocks.search');
     Route::post('stocks/add-modal', [StockController::class, 'addModal'])->name('stocks.addModal');
-
+Route::post('stocks/{stock}/consolider', [StockController::class, 'consolider'])->name('stocks.consolider');
     // Routes pour les Ventes
     Route::resource('ventes', VenteController::class);
 
@@ -65,4 +65,4 @@ Route::middleware('auth')->group(function () {
     // Route du profil utilisateur
     Route::get('/profil', [ProfileController::class, 'index'])->name('profil');
 
-});
+// });

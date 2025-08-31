@@ -32,7 +32,12 @@
                     <td>{{ $stock->stock_minimum }}</td>
                     <td>{{ $stock->rupture ? 'OUI' : 'NON' }}</td>
                     <td>
-                        <a href="{{ route('stocks.show', $stock->id) }}" class="btn btn-info">Voir</a>
+                        <!-- <a href="{{ route('stocks.show', $stock->id) }}" class="btn btn-info">Voir</a> -->
+                         <a class="badge badge-info mr-2 js-view-stock"
+   data-toggle="modal"
+   data-target="#viewStockModal-{{ $stock->id }}"
+   data-url="{{ route('stocks.consolider', $stock->id) }}"
+   title="Voir" href="#"><i class="ri-eye-line mr-0"></i></a>
                         <a href="{{ route('stocks.edit', $stock->id) }}" class="btn btn-warning">Modifier</a>
                         <form action="{{ route('stocks.destroy', $stock->id) }}" method="POST" style="display:inline;">
                             @csrf

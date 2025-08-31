@@ -1,5 +1,5 @@
 @if(isset($clients) && $clients->count() > 0)
-<div class="modal fade" id="edit-Client-Modal-{{ $client->id_client }}" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="edit-Client-Modal-{{ $client->id }}" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -26,7 +26,7 @@
                             <div class="form-row">
                                 <div class="col">
                                     <label class="mb-2">ID Client</label>
-                                    <input type="text" name="id_client" class="form-control @error('id_client') is-invalid @enderror" value="{{ $client->id_client }}" required>
+                                    <input type="text" name="id_client" class="form-control @error('id_client') is-invalid @enderror" value="{{ $client->id }}" required>
                                     @error('id_client')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror

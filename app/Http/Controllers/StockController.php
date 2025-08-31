@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use App\Models\Stock;
 use Illuminate\Http\Request;
 
@@ -24,6 +24,7 @@ class StockController extends Controller
             'nom_produit' => 'required|string|max:255',
             'stock_initial' => 'required|integer|min:0',
             'entrees' => 'required|integer|min:0',
+             'prix_unitaire'  => 'required|numeric|min:0', 
             'sorties' => 'required|integer|min:0',
             'stock_minimum' => 'required|integer|min:0',
         ]);
@@ -55,11 +56,12 @@ class StockController extends Controller
         $request->validate([
             'nom_produit' => 'required|string|max:255',
             'entrees' => 'required|integer|min:0',
+             'prix_unitaire'  => 'required|numeric|min:0', 
             'stock_minimum' => 'required|integer|min:0',
         ]);
 
         // Optionnel : conserver les valeurs existantes pour les champs non modifiables
-        $data = $request->only(['nom_produit', 'entrees', 'stock_minimum']);
+        $data = $request->only(['nom_produit','prix_unitaire', 'entrees', 'stock_minimum']);
         $data['stock_initial'] = $stock->stock_initial;
         $data['sorties'] = $stock->sorties;
 
@@ -116,12 +118,14 @@ class StockController extends Controller
         $request->validate([
             'nom_produit' => 'required|string|max:255',
             'entrees' => 'required|integer|min:0',
+             'prix_unitaire'  => 'required|numeric|min:0',
             'stock_minimum' => 'required|integer|min:0',
         ]);
 
         $data = [
             'nom_produit' => $request->nom_produit,
             'stock_initial' => 0,
+             'prix_unitaire'  => $request->prix_unitaire,
             'entrees' => $request->entrees,
             'sorties' => 0,
             'stock_minimum' => $request->stock_minimum,
@@ -135,4 +139,29 @@ class StockController extends Controller
             return redirect()->back()->withErrors(['error' => 'Erreur lors de l\'ajout via modal : ' . $e->getMessage()]);
         }
     }
+
+    public function consolider(Stock $stock)
+{
+    DB::transaction(function () use ($stock) {
+        if ($stock->entrees > 0) {
+            $stock->stock_initial += $stock->entrees;
+            $stock->entrees = 0;
+            $stock->rupture = ($stock->stock_initial - $stock->sorties) <= $stock->stock_minimum;
+            $stock->save();
+        }
+    });
+
+    // renvoyer les données à afficher dans la modale
+    return response()->json([
+        'id'             => $stock->id,
+        'nom_produit'    => $stock->nom_produit,
+        'stock_initial'  => $stock->stock_initial,
+        'entrees'        => $stock->entrees,
+        'sorties'        => $stock->sorties,
+        'stock_minimum'  => $stock->stock_minimum,
+        'rupture'        => $stock->rupture,
+        'stock_actuel'   => $stock->stock_actuel,
+        'updated_at'     => $stock->updated_at->format('d/m/Y H:i'),
+    ]);
+}
 }
