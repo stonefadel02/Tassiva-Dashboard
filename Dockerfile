@@ -23,10 +23,13 @@ RUN chown -R application:application /app/storage /app/bootstrap/cache
 USER application
 
 # Script de démarrage (migrations, caches…)
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
+COPY start.sh /usr/local/bin/start.sh
+# si ton script est sous un sous-dossier (ex: render/start.sh) adapte :
+# COPY render/start.sh /usr/local/bin/start.sh
 
-EXPOSE 8080
-ENV WEB_PHP_SOCKET=127.0.0.1:9000
-ENV PORT=8080
-CMD ["/start.sh"]
+# autorisations
+RUN dos2unix /usr/local/bin/start.sh 2>/dev/null || true \
+ && chmod +x /usr/local/bin/start.sh
+
+# lance ce script au démarrage
+CMD ["/usr/local/bin/start.sh"]
