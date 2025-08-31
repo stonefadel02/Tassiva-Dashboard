@@ -2,7 +2,6 @@
 set -e
 
 # Génère la clé si absente
-php artisan key:generate --force || true
 
 # Optimisations de prod
 php artisan config:cache || true
