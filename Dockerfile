@@ -12,24 +12,20 @@ FROM webdevops/php-nginx:8.2
 WORKDIR /app
 ENV WEB_DOCUMENT_ROOT=/app/public
 
-# Extensions PHP nécessaires pour Laravel + MySQL
 RUN docker-php-ext-install pdo pdo_mysql
 
-# Copie du code + vendor
 COPY --from=vendor /app /app
 
-# Permissions Laravel
+# (on est encore root ici)
 RUN chown -R application:application /app/storage /app/bootstrap/cache
+
+# copier et rendre exécutable AVANT de changer d’utilisateur
+COPY start.sh /usr/local/bin/start.sh
+RUN dos2unix /usr/local/bin/start.sh 2>/dev/null || true \
+ && chmod +x /usr/local/bin/start.sh \
+ && chown application:application /usr/local/bin/start.sh
+
+# seulement maintenant on passe en user non-root
 USER application
 
-# Script de démarrage (migrations, caches…)
-COPY start.sh /usr/local/bin/start.sh
-# si ton script est sous un sous-dossier (ex: render/start.sh) adapte :
-# COPY render/start.sh /usr/local/bin/start.sh
-
-# autorisations
-RUN dos2unix /usr/local/bin/start.sh 2>/dev/null || true \
- && chmod +x /usr/local/bin/start.sh
-
-# lance ce script au démarrage
 CMD ["/usr/local/bin/start.sh"]
