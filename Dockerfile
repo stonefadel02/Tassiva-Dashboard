@@ -1,12 +1,11 @@
-# ---- builder: installe les vendor avec Composer ----
+# ---- builder ----
 FROM composer:2 AS vendor
 WORKDIR /app
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --prefer-dist --no-ansi --no-interaction --no-progress
+
+# Copie TOUT le projet d'abord (artisan sera là)
 COPY . .
-# (si tu as des packages qui s’installent après copy)
-RUN composer install --no-dev --prefer-dist --no-ansi --no-interaction --no-progress \
- && php artisan package:discover --ansi || true
+RUN composer install --no-dev --prefer-dist --no-ansi --no-interaction --no-progress
+# (facultatif) php artisan package:discover --ansi || true
 
 # ---- runtime: Nginx + PHP-FPM ----
 FROM webdevops/php-nginx:8.2
