@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
 set -e
 
-# Génère la clé si absente
+php artisan config:clear  || true
+php artisan cache:clear   || true
+php artisan route:clear   || true
+php artisan view:clear    || true
 
-# Optimisations de prod
-php artisan config:cache || true
-php artisan route:cache || true
-php artisan view:cache || true
-
-# Migrations en prod
+php artisan config:cache  || true
 php artisan migrate --force || true
 
-# Lance Nginx+PHP-FPM via supervisord (image webdevops)
+# lance nginx + php-fpm (image webdevops)
 exec /usr/bin/supervisord -n
