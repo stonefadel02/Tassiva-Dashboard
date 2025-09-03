@@ -1,14 +1,17 @@
 # ---- node builder (vite) ----
 FROM node:20 AS nodebuilder
 WORKDIR /app
+
 COPY package*.json ./
 RUN npm ci || npm install
+
 COPY . .
 RUN npm run build
 
 # ---- vendor (composer) ----
 FROM composer:2 AS vendor
 WORKDIR /app
+
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --prefer-dist --no-ansi --no-interaction --no-scripts
 COPY . .
@@ -21,10 +24,13 @@ WORKDIR /app
 ENV WEB_DOCUMENT_ROOT=/app/public
 ENV PHP_MEMORY_LIMIT=256M
 
+# Code + vendor
 COPY --from=vendor /app /app
-# ✅ on copie les assets construits (public/build, manifest, etc.)
-COPY --from=nodebuilder /app/public /app/public
+# ✅ On copie aussi les assets Vite générés
+COPY --from=nodebuilder /app/public/build /app/public/build
+COPY --from=nodebuilder /app/public/hot /app/public/hot  # si besoin
 
+# Dossiers Laravel
 RUN mkdir -p /app/storage/framework/{cache,sessions,views} \
     /app/storage/logs /app/bootstrap/cache && \
     chown -R application:application /app/storage /app/bootstrap/cache && \
