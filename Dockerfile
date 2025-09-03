@@ -1,9 +1,9 @@
-# ---- builder ----
+
 FROM composer:2 AS vendor
 WORKDIR /app
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --prefer-dist --no-ansi --no-interaction --no-progress
 COPY . .
+RUN composer install --no-dev --prefer-dist --no-ansi --no-interaction --no-progress
+
 
 # ---- runtime ----
 FROM webdevops/php-nginx:8.2
