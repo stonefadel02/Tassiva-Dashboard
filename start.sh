@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
 set -e
 
+# Se positionner dans le répertoire de l'application
 cd /app
 
-php artisan config:clear  || true
-php artisan cache:clear   || true
-php artisan route:clear   || true
-php artisan view:clear    || true
+# Vider tous les caches est la bonne pratique pour cet environnement
+echo "Clearing Laravel caches..."
+php artisan config:clear
+php artisan cache:clear
+php artisan route:clear
+php artisan view:clear
 
-php artisan config:cache  || true
-php artisan migrate --force || true
+# Lancer les migrations
+echo "Running database migrations..."
+php artisan migrate --force
 
-# L’image webdevops utilise supervisord pour nginx + php-fpm
+# Lancer les services Nginx et PHP-FPM
+echo "Starting services..."
 exec /usr/bin/supervisord -n
