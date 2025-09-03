@@ -9,5 +9,4 @@ php artisan view:clear    || true
 php artisan config:cache  || true
 php artisan migrate --force || true
 
-# lance nginx + php-fpm (image webdevops)
 exec /usr/bin/supervisord -n
