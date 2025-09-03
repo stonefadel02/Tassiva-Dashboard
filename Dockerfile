@@ -1,8 +1,19 @@
+# ---- node builder ----
+FROM node:20 AS nodebuilder
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
 
+
+# ---- php vendor ----
 FROM composer:2 AS vendor
 WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
 COPY . .
-RUN composer install --no-dev --prefer-dist --no-ansi --no-interaction --no-progress
+RUN composer dump-autoload -o
 
 
 # ---- runtime ----
@@ -12,8 +23,10 @@ WORKDIR /app
 ENV WEB_DOCUMENT_ROOT=/app/public
 ENV PHP_MEMORY_LIMIT=256M
 
-# Code + vendor
+# Copy PHP vendor + code
 COPY --from=vendor /app /app
+# Copy compiled frontend assets
+COPY --from=nodebuilder /app/public /app/public
 
 # Crée les dossiers Laravel + bons droits
 RUN mkdir -p /app/storage/framework/{cache,sessions,views} \
