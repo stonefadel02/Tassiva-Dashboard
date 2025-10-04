@@ -21,10 +21,8 @@
         </div>
     </div>
 </footer>
-<!-- Backend Bundle JavaScript -->
 <script src="{{ asset('assets/js/backend-bundle.min.js') }}"></script>
 
-<!-- Table Treeview JavaScript -->
 <script src="{{ asset('assets/js/table-treeview.js') }}"></script>
 
 <!-- Chart Custom JavaScript -->
