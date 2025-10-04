@@ -47,8 +47,8 @@
                                         <div class="form-row mb-3">
                                             <div class="col">
                                                 <label>Nom du client</label>
-                                                <select id="client_id" class="custom-select form-control-sm"
-                                                    name="client_id">
+                                                <select id="id_client" class="custom-select form-control-sm"
+                                                    name="id_client">
                                                     <option selected disabled>Sélectionner un client...</option>
                                                     @foreach ($clients as $client)
                                                         <option data-adresse="{{ e($client->adresse) }}"
