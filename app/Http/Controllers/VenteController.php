@@ -36,7 +36,7 @@ class VenteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_client' => 'required|exists:clients,id_client',
+            'client_id' => 'required|exists:clients,id_client',
     'produit_id' => 'required|exists:stocks,id',
     'quantite_vendue' => 'required|numeric|min:1',
             'prix_unitaire' => 'required|numeric|min:0',
@@ -67,7 +67,8 @@ class VenteController extends Controller
         $vente = Vente::create([
             'date' => now(),
             'produit_id' => $stock->id,
-            'id_client' => $client->id,
+            'id_client' => $client->id_client,
+
             'nom_produit' => $stock->nom_produit, // ← maintenant $stock est défini
             'quantite_vendue' => $request->quantite_vendue,
             'prix_unitaire' => $request->prix_unitaire,
@@ -100,7 +101,8 @@ class VenteController extends Controller
                 'id_commande' => $vente->id,
                 'date_commande' => $now,
                 'date_livraison' => $dateLivraison,
-                'id_client' => $client->id,
+                'id_client' => $client->id_client,
+
                 'nom_client' => $client->nom_client,
                 'adresse_livraison' => $request->adresse_livraison,
                 'moyen_livraison' => 'Aucun',
