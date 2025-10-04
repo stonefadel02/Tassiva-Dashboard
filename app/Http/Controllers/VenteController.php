@@ -36,9 +36,9 @@ class VenteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'produit_id' => 'required|exists:stocks,id',
-            'client_id' => 'required|exists:clients,id',
-            'quantite_vendue' => 'required|integer|min:1',
+            'id_client' => 'required|exists:clients,id_client',
+    'produit_id' => 'required|exists:stocks,id',
+    'quantite_vendue' => 'required|numeric|min:1',
             'prix_unitaire' => 'required|numeric|min:0',
             'mode_paiement' => 'required|string|max:255',
             'date_livraison' => 'nullable|date',

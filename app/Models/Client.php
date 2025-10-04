@@ -11,6 +11,9 @@ use Illuminate\Support\Str;
 class Client extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'id_client';
+public $incrementing = false;
+protected $keyType = 'string';
 
     protected $fillable = [
         'id_client', // gardé pour affichage/lecture, mais généré côté serveur
