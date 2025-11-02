@@ -7,7 +7,7 @@ COPY . .
 RUN npm run build
 
 # ---- vendor (composer) ----
-FROM composer:2 AS vendor
+FROM webdevops/php-nginx:8.2 AS vendor
 WORKDIR /app
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --prefer-dist --no-ansi --no-interaction --no-scripts
