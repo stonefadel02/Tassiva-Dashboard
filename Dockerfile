@@ -7,7 +7,7 @@ COPY . .
 RUN npm run build
 
 # ---- vendor (composer) ----
-FROM webdevops/php-nginx:8.2 AS vendor
+FROM webdevops/php-nginx:8.3 AS vendor
 WORKDIR /app
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --prefer-dist --no-ansi --no-interaction --no-scripts
@@ -15,7 +15,7 @@ COPY . .
 RUN composer dump-autoload -o
 
 # ---- runtime ----
-FROM webdevops/php-nginx:8.2
+FROM webdevops/php-nginx:8.3
 WORKDIR /app
 
 ENV WEB_DOCUMENT_ROOT=/app/public
