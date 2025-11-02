@@ -41,14 +41,16 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     });
 
     // Routes pour les Stocks
-    Route::resource('stocks', StockController::class);
     Route::post('stocks/{stock}/reapprovisionner', [StockController::class, 'reapprovisionner'])->name('stocks.reapprovisionner');
     Route::get('stocks/search', [StockController::class, 'search'])->name('stocks.search');
     Route::post('stocks/add-modal', [StockController::class, 'addModal'])->name('stocks.addModal');
-Route::post('stocks/{stock}/consolider', [StockController::class, 'consolider'])->name('stocks.consolider');
-    // Routes pour les Ventes
-    Route::resource('ventes', VenteController::class);
+    Route::post('stocks/{stock}/consolider', [StockController::class, 'consolider'])->name('stocks.consolider');
+    Route::get('/stocks/export', [StockController::class, 'export'])->name('stocks.export');
+    Route::resource('stocks', StockController::class);
 
+    // Routes pour les Ventes
+    Route::get('/ventes/export', [VenteController::class, 'export'])->name('ventes.export');
+    Route::resource('ventes', VenteController::class);
     // Routes pour les Livraisons
     Route::resource('livraisons', LivraisonController::class);
 

@@ -10,9 +10,16 @@ use App\Models\Livraison;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel; // <-- 1. AJOUTEZ CECI
+use App\Exports\VentesExport;
 
 class VenteController extends Controller
 {
+
+    public function export() // <-- 3. AJOUTEZ CETTE MÉTHODE
+    {
+        return Excel::download(new VentesExport, 'ventes.xlsx');
+    }
     // Afficher la liste des ventes
     public function index()
     {

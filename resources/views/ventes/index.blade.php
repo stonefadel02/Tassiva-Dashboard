@@ -2,7 +2,7 @@
 <html lang="fr">
 
 <head>
-    <title>{{ $ventes }}</title>
+    <title>Gestion des Ventes</title>
     @include('layouts.meta')
 </head>
 
@@ -23,17 +23,25 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
-                            <div>
-                                <h2 class="mb-3">Gestion des ventes</h2>
-                                <p class="mb-0">Suivi complet des ventes : enregistrement rapide, historique détaillé, gestion des <br>
-                                    commande pour une meilleure performance commerciale au quotidien.
-                                    
-                                </p>
-                            </div>
-                            <a href="#" class="btn btn-primary add-list" data-toggle="modal"
-                                data-target="#add-Vente-Modal"><i class="las la-plus mr-3"></i>Ajoutez une commande</a>
-                        </div>
+                        <<div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+    <div>
+        <h2 class="mb-3">Gestion des ventes</h2>
+        <p class="mb-0">Suivi complet des ventes : enregistrement rapide, historique détaillé, gestion des <br>
+            commande pour une meilleure performance commerciale au quotidien.
+            
+        </p>
+    </div>
+    
+    <div>
+        <a href="{{ route('ventes.export') }}" class="btn btn-success add-list mr-2">
+            <i class="las la-file-excel mr-3"></i>Exporter en Excel
+        </a>
+        <a href="#" class="btn btn-primary add-list" data-toggle="modal"
+            data-target="#add-Vente-Modal">
+            <i class="las la-plus mr-3"></i>Ajoutez une commande
+        </a>
+    </div>
+</div>
                     </div>
                     <div class="col-lg-12 mb-3">
                         @if ($errors->any())

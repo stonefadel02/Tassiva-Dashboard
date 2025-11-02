@@ -32,6 +32,8 @@ class Stock extends Model
         return (int) ($this->stock_initial + $this->entrees - $this->sorties);
     }
 
+    
+
     // Relation : Un stock peut avoir plusieurs ventes
     public function ventes()
     {

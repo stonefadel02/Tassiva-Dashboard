@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use App\Models\Stock;
 use Illuminate\Http\Request;
-
+use Maatwebsite\Excel\Facades\Excel; // <-- Ajoutez ceci
+use App\Exports\StocksExport;        // <-- Ajoutez cec
 class StockController extends Controller
 {
+
+    public function export()
+    {
+        return Excel::download(new StocksExport, 'stocks.xlsx');
+    }
     public function index()
     {
         $stocks = Stock::all();

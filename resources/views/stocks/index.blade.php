@@ -22,17 +22,25 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
-                            <div>
-                                <h2 class="mb-3">Gestion des stocks</h2>
-                                <p class="mb-0">La liste des produits dicte efficacement la présentation du produit et
-                                    offre de l'espace.
-                                    <br> pour répertorier vos produits et votre offre de la manière la plus attrayante.
-                                </p>
-                            </div>
-                            <a href="#" class="btn btn-primary add-list" data-toggle="modal"
-                                data-target="#addStockModal"><i class="las la-plus mr-3"></i>Ajoutez du stock</a>
-                        </div>
+                       <div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+    <div>
+        <h2 class="mb-3">Gestion des stocks</h2>
+        <p class="mb-0">La liste des produits dicte efficacement la présentation du produit et
+            offre de l'espace.
+            <br> pour répertorier vos produits et votre offre de la manière la plus attrayante.
+        </p>
+    </div>
+    
+    <div>
+        <a href="{{ route('stocks.export') }}" class="btn btn-success add-list mr-2">
+            <i class="las la-file-excel mr-3"></i>Exporter en Excel
+        </a>
+        <a href="#" class="btn btn-primary add-list" data-toggle="modal"
+            data-target="#addStockModal">
+            <i class="las la-plus mr-3"></i>Ajoutez du stock
+        </a>
+    </div>
+</div>
                     </div>
                     <div class="col-lg-12 mb-3">
                         <div class="table-responsive rounded mb-3">

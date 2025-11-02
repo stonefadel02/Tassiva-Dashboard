@@ -26,6 +26,12 @@ class Vente extends Model
         return $this->belongsTo(Stock::class, 'produit_id');
     }
 
+    public function getTotalVenteAttribute()
+    {
+        // Multiplie la quantité par le prix unitaire
+        return $this->quantite_vendue * $this->prix_unitaire;
+    }
+
     // Relation : Une vente appartient à un client
     public function client()
     {
